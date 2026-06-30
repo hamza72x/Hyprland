@@ -25,11 +25,13 @@ local menu        = "rofi -show drun"
 ---- AUTOSTART ----
 -------------------
 
-hl.exec_once("waybar")
-hl.exec_once("dunst")
-hl.exec_once("/usr/libexec/polkit-gnome-authentication-agent-1")
-hl.exec_once("wl-paste --type text --watch cliphist store")
-hl.exec_once("wl-paste --type image --watch cliphist store")
+hl.on("hyprland.start", function()
+    hl.exec_cmd("waybar")
+    hl.exec_cmd("dunst")
+    hl.exec_cmd("/usr/libexec/polkit-gnome-authentication-agent-1")
+    hl.exec_cmd("wl-paste --type text --watch cliphist store")
+    hl.exec_cmd("wl-paste --type image --watch cliphist store")
+end)
 
 -------------------------------
 ---- ENVIRONMENT VARIABLES ----
@@ -84,7 +86,6 @@ hl.config({
 
     dwindle = {
         preserve_split = true,
-        pseudotile     = true,
     },
 
     master = {
@@ -255,19 +256,19 @@ hl.window_rule({
     match = { title = "^Picture%-in%-Picture$" },
     float = true,
     pin   = true,
-    size  = { width = 480, height = 270 },
+    size  = "480 270",
 })
 
 hl.window_rule({
     name  = "terminal-opacity",
     match = { class = "^(Alacritty|foot|kitty)$" },
-    opacity = { active = 0.92, inactive = 0.85 },
+    opacity = "0.92 0.85",
 })
 
 hl.window_rule({
     name  = "idle-fullscreen-video",
     match = { class = "^(firefox|mpv|vlc)$", fullscreen = true },
-    idle_inhibit = true,
+    idle_inhibit = "fullscreen",
 })
 
 -----------------------
