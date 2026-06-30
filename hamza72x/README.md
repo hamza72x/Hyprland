@@ -7,10 +7,12 @@ Fedora 44 ships outdated Hypr ecosystem libraries and lacks Lua 5.5, so we build
 ## Quick Install (prebuilt)
 
 ```bash
-# Extract and install the prebuilt tarball
-mkdir /tmp/hyprland && cd /tmp/hyprland
-tar xzf /path/to/hamza72x/hyprland-0.55.0-fedora44-x86_64.tar.gz
-sudo ./install.sh
+# From GitHub release (recommended):
+sudo ./install_release_file.sh https://github.com/hamza72x/Hyprland/releases/download/v0.55.0-fedora44/hyprland-0.55.0-1.fc44.custom.x86_64.rpm
+
+# Or install directly with dnf:
+curl -fSLO https://github.com/hamza72x/Hyprland/releases/download/v0.55.0-fedora44/hyprland-0.55.0-1.fc44.custom.x86_64.rpm
+sudo dnf install ./hyprland-0.55.0-1.fc44.custom.x86_64.rpm
 ```
 
 ## Build from Source + RPM
@@ -37,7 +39,20 @@ sudo dnf install ./hyprland-0.55.0-1.fc44.custom.x86_64.rpm
 | File | Description |
 |------|-------------|
 | `build-hyprland.sh` | All-in-one build script (deps + build + RPM) |
-| `hyprland-0.55.0-fedora44-x86_64.tar.gz` | Prebuilt tarball with install script |
+| `install_all.sh` | Install from a locally built RPM |
+| `install_release_file.sh` | Install from a GitHub release URL |
+
+## Install from GitHub Release (easiest)
+
+```bash
+sudo ./install_release_file.sh https://github.com/hamza72x/Hyprland/releases/download/v0.55.0-fedora44/hyprland-0.55.0-1.fc44.custom.x86_64.rpm
+```
+
+Or just download and install directly:
+```bash
+curl -fSLO https://github.com/hamza72x/Hyprland/releases/download/v0.55.0-fedora44/hyprland-0.55.0-1.fc44.custom.x86_64.rpm
+sudo dnf install ./hyprland-0.55.0-1.fc44.custom.x86_64.rpm
+```
 
 ## What Gets Built from Source
 
