@@ -20,7 +20,7 @@ if [ ! -f "$SCRIPT_DIR/common.sh" ]; then
     curl -fSL -o "$SCRIPT_DIR/common.sh" "$REPO_BASE_URL/common.sh"
 
     mkdir -p "$SCRIPT_DIR/configs/hypr" "$SCRIPT_DIR/configs/waybar" "$SCRIPT_DIR/configs/alacritty"
-    for f in hypr/hyprland.conf hypr/keybindings.conf hypr/windowrules.conf hypr/monitors.conf hypr/animations.conf; do
+    for f in hypr/hyprland.lua hypr/hyprland.conf hypr/keybindings.conf hypr/windowrules.conf hypr/monitors.conf hypr/animations.conf; do
         curl -fSL -o "$SCRIPT_DIR/configs/$f" "$REPO_BASE_URL/configs/$f" 2>/dev/null || true
     done
     for f in waybar/config.jsonc waybar/style.css; do

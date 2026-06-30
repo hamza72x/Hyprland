@@ -47,7 +47,7 @@ echo "Downloading installer files..."
 curl -fSL -o "$WORKDIR/common.sh" "$REPO_BASE_URL/common.sh"
 
 mkdir -p "$WORKDIR/configs/hypr" "$WORKDIR/configs/waybar" "$WORKDIR/configs/alacritty"
-for f in hypr/hyprland.conf hypr/keybindings.conf hypr/windowrules.conf hypr/monitors.conf hypr/animations.conf; do
+for f in hypr/hyprland.lua hypr/hyprland.conf hypr/keybindings.conf hypr/windowrules.conf hypr/monitors.conf hypr/animations.conf; do
     curl -fsSL -o "$WORKDIR/configs/$f" "$REPO_BASE_URL/configs/$f" 2>/dev/null || true
 done
 for f in waybar/config.jsonc waybar/style.css; do

@@ -230,9 +230,11 @@ install_configs() {
 
     local hypr_conf_dir="$HOME/.config/hypr"
 
-    if [ -f "$hypr_conf_dir/hyprland.conf" ]; then
-        warn "Existing config found at $hypr_conf_dir/hyprland.conf"
+    # Hyprland v0.55+ uses hyprland.lua (Lua config) as primary
+    if [ -f "$hypr_conf_dir/hyprland.lua" ] || [ -f "$hypr_conf_dir/hyprland.conf" ]; then
+        warn "Existing config found at $hypr_conf_dir/"
         if ask_yes_no "Overwrite with default config?"; then
+            mkdir -p "$hypr_conf_dir"
             cp -r "$config_src/hypr/"* "$hypr_conf_dir/"
             ok "Config files updated"
         else
