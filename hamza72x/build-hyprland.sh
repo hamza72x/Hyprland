@@ -26,6 +26,8 @@ HYPRCURSOR_TAG="v0.1.13"
 HYPRWIRE_TAG="v0.3.1"
 AQUAMARINE_TAG="v0.12.1"
 HYPRWAYLAND_SCANNER_TAG="v0.4.6"
+HYPRTOOLKIT_TAG="v0.5.4"
+HYPRLAND_GUIUTILS_TAG="v0.2.1"
 LUA_VERSION="5.5.0"
 
 # --------------------------------------------------------------------------- #
@@ -86,6 +88,7 @@ install_deps() {
         libpng-devel file-devel hwdata-devel libseat-devel \
         libdisplay-info-devel librsvg2-devel tomlplusplus-devel \
         pugixml-devel libzip-devel readline-devel python3 libffi-devel \
+        iniparser-devel abseil-cpp-devel \
         rpm-build \
         --skip-unavailable
     ok "DNF dependencies installed"
@@ -118,6 +121,21 @@ build_deps() {
     cmake --build build -j"$JOBS"
     sudo cmake --install build
     ok "aquamarine installed"
+
+    # hyprtoolkit needs same -Wpedantic fix and protocol regeneration
+    info "Building hyprtoolkit ($HYPRTOOLKIT_TAG)"
+    local ht_dir="$BUILD_DIR/hyprtoolkit"
+    clone_and_checkout "hyprtoolkit" "$HYPRTOOLKIT_TAG" "$ht_dir"
+    cd "$ht_dir"
+    sed -i 's/-Wpedantic//' CMakeLists.txt
+    rm -f protocols/*.cpp protocols/*.hpp 2>/dev/null || true
+    cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr
+    cmake --build build -j"$JOBS"
+    sudo cmake --install build
+    ok "hyprtoolkit installed"
+
+    # hyprland-guiutils
+    build_cmake_dep "hyprland-guiutils" "hyprland-guiutils" "$HYPRLAND_GUIUTILS_TAG"
 
     # Lua 5.5
     info "Building Lua $LUA_VERSION"
@@ -195,7 +213,7 @@ package_rpm() {
     DESTDIR="$STAGING" cmake --install build
 
     # Install all custom-built libraries into staging
-    for dep in hyprutils hyprlang hyprgraphics hyprcursor hyprwire aquamarine hyprwayland-scanner; do
+    for dep in hyprutils hyprlang hyprgraphics hyprcursor hyprwire aquamarine hyprwayland-scanner hyprtoolkit hyprland-guiutils; do
         if [ -d "$BUILD_DIR/$dep/build" ]; then
             cd "$BUILD_DIR/$dep"
             DESTDIR="$STAGING" cmake --install build
