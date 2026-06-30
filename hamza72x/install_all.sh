@@ -147,9 +147,14 @@ if ask_yes_no "Install SDDM (display manager)?"; then
     echo ""
     dnf install -y "${SDDM_DEPS[@]}"
     systemctl enable sddm 2>/dev/null || true
-    ok "SDDM installed and enabled"
+    systemctl set-default graphical.target 2>/dev/null || true
+    ok "SDDM installed, enabled, and graphical.target set as default"
 else
     echo "  Skipped."
+    echo ""
+    info "Setting graphical.target as default boot target..."
+    systemctl set-default graphical.target 2>/dev/null || true
+    ok "graphical.target set (Hyprland will start on login via TTY session)"
 fi
 
 echo ""
