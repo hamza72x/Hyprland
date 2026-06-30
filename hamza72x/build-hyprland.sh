@@ -239,41 +239,6 @@ Source0:        hyprland-%{version}.tar.gz
 
 AutoReqProv:    no
 
-Requires:       wayland
-Requires:       libxkbcommon
-Requires:       cairo
-Requires:       pango
-Requires:       pixman
-Requires:       libdrm
-Requires:       mesa-libgbm
-Requires:       libinput
-Requires:       glib2
-Requires:       re2
-Requires:       muParser
-Requires:       lcms2
-Requires:       libXcursor
-Requires:       libuuid
-Requires:       xcb-util-errors
-Requires:       libxcb
-Requires:       xcb-util-renderutil
-Requires:       xcb-util-wm
-Requires:       mesa-libEGL
-Requires:       glslang
-Requires:       libseat
-Requires:       libdisplay-info
-Requires:       hwdata
-Requires:       librsvg2
-Requires:       tomlplusplus
-Requires:       pugixml
-Requires:       libzip
-Requires:       libwebp
-Requires:       libjpeg-turbo
-Requires:       libpng
-Requires:       file-libs
-Requires:       xorg-x11-server-Xwayland
-Requires:       polkit
-Requires:       libffi
-
 %description
 Hyprland is a dynamic tiling Wayland compositor based on wlroots that doesn't
 sacrifice on its looks. It supports multiple layouts, fancy effects, has a
