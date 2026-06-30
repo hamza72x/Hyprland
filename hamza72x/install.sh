@@ -5,13 +5,15 @@
 # Usage:
 #   curl -fsSL https://raw.githubusercontent.com/hamza72x/Hyprland/main/hamza72x/install.sh | sudo bash
 #
+# Idempotent: safe to run multiple times.
+#
 set -euo pipefail
 
 REPO="hamza72x/Hyprland"
 REPO_BASE_URL="https://raw.githubusercontent.com/$REPO/main/hamza72x"
 API_URL="https://api.github.com/repos/$REPO/releases/latest"
 WORKDIR="$(mktemp -d)"
-chmod 755 "$WORKDIR"
+chmod 777 "$WORKDIR"
 
 cleanup() { rm -rf "$WORKDIR"; }
 trap cleanup EXIT
@@ -45,7 +47,7 @@ echo ""
 
 # --- Download all required files ---
 echo "Downloading installer files..."
-curl -fSL -o "$WORKDIR/common.sh" "$REPO_BASE_URL/common.sh"
+curl -fsSL -o "$WORKDIR/common.sh" "$REPO_BASE_URL/common.sh"
 
 mkdir -p "$WORKDIR/configs/hypr" "$WORKDIR/configs/waybar" "$WORKDIR/configs/alacritty"
 for f in hypr/hyprland.lua hypr/hyprland.conf hypr/keybindings.conf hypr/windowrules.conf hypr/monitors.conf hypr/animations.conf; do
@@ -61,7 +63,7 @@ done
 echo "Downloading RPM..."
 RPM_FILE="$WORKDIR/$(basename "$RPM_URL")"
 curl -fSL -o "$RPM_FILE" "$RPM_URL"
-chmod -R a+r "$WORKDIR"
+chmod -R a+rX "$WORKDIR"
 echo ""
 
 # --- Run install ---
@@ -73,12 +75,11 @@ info "Installing Hyprland RPM..."
 echo ""
 dnf install -y "$RPM_FILE"
 
-# Install default configs as the real user
+# --- Install configs as the real user ---
 REAL_USER="${SUDO_USER:-$USER}"
 REAL_HOME="$(eval echo "~$REAL_USER")"
-if [ -d "$WORKDIR/configs" ]; then
-    export HOME="$REAL_HOME"
-    su "$REAL_USER" -c "source '$WORKDIR/common.sh' && install_configs '$WORKDIR/configs'"
-fi
+
+install_configs "$WORKDIR/configs" "$REAL_HOME"
+fix_config_ownership "$REAL_USER" "$REAL_HOME"
 
 post_install

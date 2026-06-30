@@ -3,7 +3,7 @@
 # install_all.sh - Install Hyprland from a local build artifact.
 #
 # Installs runtime deps, desktop packages, SDDM, configs, then the RPM.
-# Meant for barebone Fedora installations.
+# Idempotent: safe to run multiple times.
 #
 # Usage:
 #   sudo ./install_all.sh
@@ -32,20 +32,18 @@ fi
 
 echo "RPM: $(basename "$RPM_FILE")"
 
-# Install all dependencies (runtime + desktop + SDDM)
 install_dependencies
 
-# Install Hyprland RPM
 info "Installing Hyprland RPM..."
 echo ""
 dnf install -y "$RPM_FILE"
 
-# Install default configs (run as the real user, not root)
 REAL_USER="${SUDO_USER:-$USER}"
 REAL_HOME="$(eval echo "~$REAL_USER")"
+
 if [ -d "$SCRIPT_DIR/configs" ]; then
-    export HOME="$REAL_HOME"
-    su "$REAL_USER" -c "source '$SCRIPT_DIR/common.sh' && install_configs '$SCRIPT_DIR/configs'"
+    install_configs "$SCRIPT_DIR/configs" "$REAL_HOME"
+    fix_config_ownership "$REAL_USER" "$REAL_HOME"
 fi
 
 post_install
