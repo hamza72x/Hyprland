@@ -11,6 +11,7 @@ REPO="hamza72x/Hyprland"
 REPO_BASE_URL="https://raw.githubusercontent.com/$REPO/main/hamza72x"
 API_URL="https://api.github.com/repos/$REPO/releases/latest"
 WORKDIR="$(mktemp -d)"
+chmod 755 "$WORKDIR"
 
 cleanup() { rm -rf "$WORKDIR"; }
 trap cleanup EXIT
@@ -60,6 +61,7 @@ done
 echo "Downloading RPM..."
 RPM_FILE="$WORKDIR/$(basename "$RPM_URL")"
 curl -fSL -o "$RPM_FILE" "$RPM_URL"
+chmod -R a+r "$WORKDIR"
 echo ""
 
 # --- Run install ---
